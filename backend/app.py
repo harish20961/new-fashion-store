@@ -9,6 +9,7 @@ from routes.cart_routes import cart_bp
 from routes.wishlist_routes import wishlist_bp
 from routes.order_routes import order_bp
 from routes.review_routes import review_bp
+from routes.admin_routes import admin_bp
 
 def create_app():
     app = Flask(__name__)
@@ -27,6 +28,7 @@ def create_app():
     app.register_blueprint(wishlist_bp, url_prefix="/api/wishlist")
     app.register_blueprint(order_bp, url_prefix="/api/orders")
     app.register_blueprint(review_bp, url_prefix="/api")
+    app.register_blueprint(admin_bp, url_prefix="/api/admin")
     # TODO (Phase 7-8): register cart_bp, wishlist_bp, order_bp, review_bp
     # the same way, once you've built them under routes/ following the
     # pattern in auth_routes.py and product_routes.py

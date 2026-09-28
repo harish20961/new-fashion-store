@@ -15,7 +15,13 @@ async function loadProductDetail() {
 
     wrap.innerHTML = `
       <div class="product-detail-grid">
-        <div class="product-detail-image">${product.image_url ? `<img src="${product.image_url}" alt="${product.name}">` : ""}</div>
+        <div class="product-detail-image">
+  ${product.image
+    ? `<img src="../${product.image}" alt="${product.name}">`
+    : product.image_url
+      ? `<img src="${product.image_url}" alt="${product.name}">`
+      : ""}
+</div>
         <div class="product-detail-info">
           <h1>${product.name}</h1>
           <div class="product-detail-price">₹${product.price}</div>

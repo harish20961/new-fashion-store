@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Products - FashionHub Admin</title>
+
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+
+<div class="admin-container">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <h2>FashionHub</h2>
+            <span>ADMIN PANEL</span>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="index.html" class="nav-item">
+                <span>📊</span>
+                Dashboard
+            </a>
+
+            <a href="products.html" class="nav-item active">
+                <span>📦</span>
+                Products
+            </a>
+
+            <a href="orders.html" class="nav-item">
+                <span>🛒</span>
+                Orders
+            </a>
+
+            <a href="users.html" class="nav-item">
+                <span>👥</span>
+                Users
+            </a>
+
+            <a href="reviews.html" class="nav-item">
+                <span>⭐</span>
+                Reviews
+            </a>
+
+        </nav>
+
+        <button id="logoutBtn" class="logout-btn">
+            🚪 Logout
+        </button>
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Header -->
+        <header class="top-header">
+
+            <div>
+                <h1>Products</h1>
+                <p>Manage your FashionHub product catalog</p>
+            </div>
+
+            <button id="addProductBtn" class="primary-btn">
+                + Add Product
+            </button>
+
+        </header>
+
+
+        <!-- Search and Filter -->
+        <section class="product-toolbar">
+
+            <div class="search-box">
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search products..."
+                >
+            </div>
+
+            <select id="categoryFilter">
+                <option value="">All Categories</option>
+                <option value="Men">Men</option>
+                <option value="Women">Women</option>
+                <option value="Footwear">Footwear</option>
+                <option value="Accessories">Accessories</option>
+            </select>
+
+        </section>
+
+
+        <!-- Products Table -->
+        <section class="dashboard-section">
+
+            <div class="section-header">
+
+                <div>
+                    <h2>Product Catalog</h2>
+                    <p id="productCount">Loading products...</p>
+                </div>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Product</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Actions</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="productsTable">
+
+                        <tr>
+                            <td colspan="5" class="empty-message">
+                                Loading products...
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- Add/Edit Product Modal -->
+
+<div id="productModal" class="modal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <div>
+                <h2 id="modalTitle">Add Product</h2>
+                <p>Create a new product</p>
+            </div>
+
+            <button id="closeModal" class="close-btn">
+                &times;
+            </button>
+
+        </div>
+
+
+        <form id="productForm">
+
+            <input
+                type="hidden"
+                id="productId"
+            >
+
+
+            <div class="form-group">
+
+                <label for="productName">
+                    Product Name
+                </label>
+
+                <input
+                    type="text"
+                    id="productName"
+                    placeholder="Enter product name"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label for="productPrice">
+                        Price
+                    </label>
+
+                    <input
+                        type="number"
+                        id="productPrice"
+                        min="0"
+                        step="0.01"
+                        placeholder="999"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="productStock">
+                        Stock
+                    </label>
+
+                    <input
+                        type="number"
+                        id="productStock"
+                        min="0"
+                        placeholder="10"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="productCategory">
+                    Category
+                </label>
+
+                <select id="productCategory" required>
+
+                    <option value="">
+                        Select Category
+                    </option>
+
+                    <option value="Men">
+                        Men
+                    </option>
+
+                    <option value="Women">
+                        Women
+                    </option>
+
+                    <option value="Footwear">
+                        Footwear
+                    </option>
+
+                    <option value="Accessories">
+                        Accessories
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="productDescription">
+                    Description
+                </label>
+
+                <textarea
+                    id="productDescription"
+                    rows="4"
+                    placeholder="Enter product description"
+                ></textarea>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="productImage">
+                    Image URL
+                </label>
+
+                <input
+                    type="text"
+                    id="productImage"
+                    placeholder="https://example.com/image.jpg"
+                >
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button
+                    type="button"
+                    id="cancelBtn"
+                    class="secondary-btn"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                >
+                    Save Product
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script src="js/products.js"></script>
+
+</body>
+</html>

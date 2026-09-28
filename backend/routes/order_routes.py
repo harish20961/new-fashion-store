@@ -4,7 +4,7 @@ from bson import ObjectId
 from bson.errors import InvalidId
 from flask import Blueprint, current_app, jsonify, request
 
-from utils.auth import token_required
+from utils.auth import token_required, admin_required
 
 order_bp = Blueprint("orders", __name__)
 
@@ -84,7 +84,7 @@ def get_order(order_id):
 
 
 @order_bp.route("/<order_id>/status", methods=["PUT"])
-@token_required
+@admin_required
 def update_order_status(order_id):
     # TODO (Phase 9): restrict this to admin users (check request.user_role == "admin")
     data = request.get_json() or {}

@@ -26,3 +26,33 @@ def token_required(f):
         return f(*args, **kwargs)
 
     return decorated
+def admin_required(f):
+    """Allows access only to logged-in admin users."""
+
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.headers.get("Authorization", "").replace("Bearer ", "")
+
+        if not token:
+            return jsonify({"error": "Missing token"}), 401
+
+        try:
+            payload = jwt.decode(
+                token,
+                current_app.config["SECRET_KEY"],
+                algorithms=["HS256"]
+            )
+        except jwt.ExpiredSignatureError:
+            return jsonify({"error": "Token expired, please log in again"}), 401
+        except jwt.InvalidTokenError:
+            return jsonify({"error": "Invalid token"}), 401
+
+        request.user_id = payload["user_id"]
+        request.user_role = payload.get("role", "customer")
+
+        if request.user_role != "admin":
+            return jsonify({"error": "Admin access required"}), 403
+
+        return f(*args, **kwargs)
+
+    return decorated

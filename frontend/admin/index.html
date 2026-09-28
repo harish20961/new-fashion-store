@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FashionHub Admin Dashboard</title>
+
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+
+    <div class="admin-container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <div class="logo">
+                <h2>FashionHub</h2>
+                <span>ADMIN PANEL</span>
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <a href="index.html" class="nav-item active">
+                    <span>📊</span>
+                    Dashboard
+                </a>
+
+                <a href="products.html" class="nav-item">
+                    <span>📦</span>
+                    Products
+                </a>
+
+                <a href="orders.html" class="nav-item">
+                    <span>🛒</span>
+                    Orders
+                </a>
+
+                <a href="users.html" class="nav-item">
+                    <span>👥</span>
+                    Users
+                </a>
+
+                <a href="reviews.html" class="nav-item">
+                    <span>⭐</span>
+                    Reviews
+                </a>
+
+            </nav>
+
+            <button id="logoutBtn" class="logout-btn">
+                🚪 Logout
+            </button>
+
+        </aside>
+
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- Top Header -->
+            <header class="top-header">
+
+                <div>
+                    <h1>Dashboard</h1>
+                    <p>Welcome back, Admin 👋</p>
+                </div>
+
+                <div class="admin-profile">
+                    <div class="profile-icon">A</div>
+
+                    <div>
+                        <strong id="adminName">Admin</strong>
+                        <small>Administrator</small>
+                    </div>
+                </div>
+
+            </header>
+
+
+            <!-- Dashboard Cards -->
+            <section class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-icon users-icon">👥</div>
+
+                    <div>
+                        <p>Total Users</p>
+                        <h2 id="totalUsers">0</h2>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <div class="stat-icon products-icon">📦</div>
+
+                    <div>
+                        <p>Total Products</p>
+                        <h2 id="totalProducts">0</h2>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <div class="stat-icon orders-icon">🛒</div>
+
+                    <div>
+                        <p>Total Orders</p>
+                        <h2 id="totalOrders">0</h2>
+                    </div>
+                </div>
+
+            </section>
+
+
+            <!-- Recent Orders -->
+            <section class="dashboard-section">
+
+                <div class="section-header">
+                    <div>
+                        <h2>Recent Orders</h2>
+                        <p>Latest orders from your store</p>
+                    </div>
+
+                    <a href="orders.html" class="view-all">
+                        View All →
+                    </a>
+                </div>
+
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="ordersTable">
+
+                            <tr>
+                                <td colspan="5" class="empty-message">
+                                    No orders available
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- Quick Actions -->
+            <section class="dashboard-section">
+
+                <div class="section-header">
+                    <div>
+                        <h2>Quick Actions</h2>
+                        <p>Manage your store quickly</p>
+                    </div>
+                </div>
+
+
+                <div class="quick-actions">
+
+                    <a href="products.html" class="action-card">
+                        <span>➕</span>
+                        <div>
+                            <strong>Add Product</strong>
+                            <small>Create a new product</small>
+                        </div>
+                    </a>
+
+
+                    <a href="orders.html" class="action-card">
+                        <span>📋</span>
+                        <div>
+                            <strong>Manage Orders</strong>
+                            <small>View and update orders</small>
+                        </div>
+                    </a>
+
+
+                    <a href="users.html" class="action-card">
+                        <span>👤</span>
+                        <div>
+                            <strong>Manage Users</strong>
+                            <small>View registered users</small>
+                        </div>
+                    </a>
+
+
+                    <a href="reviews.html" class="action-card">
+                        <span>⭐</span>
+                        <div>
+                            <strong>Manage Reviews</strong>
+                            <small>Review customer feedback</small>
+                        </div>
+                    </a>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <script src="js/admin.js"></script>
+
+</body>
+</html>

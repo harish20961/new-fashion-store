@@ -2,6 +2,8 @@ from bson import ObjectId
 from bson.errors import InvalidId
 from flask import Blueprint, current_app, jsonify, request
 
+from utils.auth import admin_required
+
 product_bp = Blueprint("products", __name__)
 
 
@@ -46,6 +48,7 @@ def get_product(product_id):
 
 
 @product_bp.route("", methods=["POST"])
+@admin_required
 def create_product():
     # TODO (Phase 9): restrict this route to logged-in admins once
     # role-based access control is added on top of the JWT in auth_routes.py
@@ -61,6 +64,7 @@ def create_product():
 
 
 @product_bp.route("/<product_id>", methods=["PUT"])
+@admin_required
 def update_product(product_id):
     # TODO (Phase 9): admin-only
     data = request.get_json() or {}
@@ -76,6 +80,7 @@ def update_product(product_id):
 
 
 @product_bp.route("/<product_id>", methods=["DELETE"])
+@admin_required
 def delete_product(product_id):
     # TODO (Phase 9): admin-only
     db = current_app.db
