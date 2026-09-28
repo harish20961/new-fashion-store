@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FashionHub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="index.html" class="logo">FashionHub</a>
+    <nav class="main-nav">
+  <a href="index.html?category=Men#products">Men</a>
+  <a href="index.html?category=Women#products">Women</a>
+  <a href="index.html?category=Footwear#products">Footwear</a>
+  <a href="index.html?category=Accessories#products">Accessories</a>
+</nav>
+    <div class="header-actions">
+      <a href="login.html" id="loginLink">Log in</a>
+      <a href="cart.html" id="cartLink">Cart (0)</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-inner">
+    <h1>Clothes that fit<br>how you actually live.</h1>
+    <p class="hero-sub">Curated menswear, womenswear, footwear and accessories — new arrivals added every week.</p>
+    <a href="#categories" class="btn-primary">Browse the collection</a>
+  </div>
+</section>
+
+<section class="categories" id="categories">
+  <div class="wrap">
+    <h2>Shop by category</h2>
+    <div class="category-grid">
+      <a class="category-card cat-men" href="index.html?category=Men#products">
+        <span class="category-name">Men</span>
+        <span class="category-meta">T-Shirts, Shirts, Jeans, Jackets</span>
+      </a>
+      <a class="category-card cat-women" href="index.html?category=Women#products">
+        <span class="category-name">Women</span>
+        <span class="category-meta">Dresses, Tops, Ethnic Wear</span>
+      </a>
+      <a class="category-card cat-footwear" href="index.html?category=Footwear#products">
+        <span class="category-name">Footwear</span>
+        <span class="category-meta">Sneakers, Sandals, Sports Shoes</span>
+      </a>
+      <a class="category-card cat-accessories" href="index.html?category=Accessories#products">
+        <span class="category-name">Accessories</span>
+        <span class="category-meta">Bags, Watches, Jewellery</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="products" id="products">
+  <div class="wrap">
+    <div class="section-heading">
+      <h2 id="productsHeading">New arrivals</h2>
+      <div class="heading-meta">
+        <span id="productStatus" class="status-text">Loading products...</span>
+        <a id="clearFilter" class="clear-filter" href="index.html#products" hidden>Show all products</a>
+      </div>
+    </div>
+    <div class="product-grid" id="productGrid"></div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-about">
+      <span class="logo">FashionHub</span>
+      <p>A full-stack student project — Flask, MongoDB and vanilla JavaScript.</p>
+    </div>
+    <div class="footer-links">
+      <div>
+        <h3>Shop</h3>
+        <a href="#">Men</a>
+        <a href="#">Women</a>
+        <a href="#">Footwear</a>
+      </div>
+      <div>
+        <h3>Account</h3>
+        <a href="#">Log in</a>
+        <a href="#">Orders</a>
+        <a href="#">Wishlist</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

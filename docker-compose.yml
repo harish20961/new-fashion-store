@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    volumes:
+      - ./backend:/app
+
+# No local Mongo service here on purpose: this project connects to
+# MongoDB Atlas (cloud) via MONGO_URI in your .env file, matching the
+# blueprint's "Docker -> Flask -> MongoDB Atlas" setup.
