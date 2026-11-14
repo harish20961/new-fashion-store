@@ -19,7 +19,7 @@ def create_app():
     # --- MongoDB connection ---
     # Works with a local MongoDB or a MongoDB Atlas connection string (see .env.example)
     client = MongoClient(app.config["MONGO_URI"])
-    app.db = client.get_default_database()
+    app.db = client.get_default_database(default=app.config["MONGO_DB_NAME"])
 
     # --- Register route blueprints ---
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
@@ -29,9 +29,6 @@ def create_app():
     app.register_blueprint(order_bp, url_prefix="/api/orders")
     app.register_blueprint(review_bp, url_prefix="/api")
     app.register_blueprint(admin_bp, url_prefix="/api/admin")
-    # TODO (Phase 7-8): register cart_bp, wishlist_bp, order_bp, review_bp
-    # the same way, once you've built them under routes/ following the
-    # pattern in auth_routes.py and product_routes.py
 
     @app.route("/api/health")
     def health_check():
@@ -39,9 +36,13 @@ def create_app():
         try:
             app.db.command("ping")
             db_status = "connected"
-        except Exception as exc:
-            db_status = f"error: {exc}"
-        return jsonify({"status": "ok", "database": db_status})
+            status_code = 200
+        except Exception:
+            app.logger.exception("MongoDB health check failed")
+            db_status = "disconnected"
+            status_code = 503
+        response = {"status": "ok" if status_code == 200 else "error", "database": db_status}
+        return jsonify(response), status_code
 
     return app
 

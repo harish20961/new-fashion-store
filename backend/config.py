@@ -8,8 +8,8 @@ load_dotenv()  # reads variables from a local .env file, if present
 class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key-change-me")
 
-    # Local Mongo default; replace with your MongoDB Atlas connection string
-    # (copy .env.example to .env and set MONGO_URI there — never commit .env)
+    # Replace with your MongoDB Atlas URI in .env for cloud deployments.
     MONGO_URI = os.environ.get("MONGO_URI", "mongodb://localhost:27017/fashionhub")
+    MONGO_DB_NAME = os.environ.get("MONGO_DB_NAME", "fashionhub")
 
     JWT_EXP_DELTA_SECONDS = 60 * 60 * 24  # login tokens last 24 hours

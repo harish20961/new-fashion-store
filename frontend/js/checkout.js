@@ -26,13 +26,14 @@ async function loadCheckoutSummary() {
       .map((item) => {
         const subtotal = item.price * item.quantity;
         total += subtotal;
-        return `<div class="summary-row"><span>${item.product_name} x ${item.quantity}</span><span>₹${subtotal}</span></div>`;
+        const variant = [item.size ? `Size ${esc(item.size)}` : "", item.color ? esc(item.color) : ""].filter(Boolean).join(" · ");
+        return `<div class="summary-row"><span>${esc(item.product_name)} x ${item.quantity}${variant ? `<small class="summary-variant">${variant}</small>` : ""}</span><span>${formatPrice(subtotal)}</span></div>`;
       })
       .join("");
 
     summaryWrap.innerHTML = `
       <div class="summary-rows">${rows}</div>
-      <div class="summary-total"><span>Total</span><span>₹${total}</span></div>
+      <div class="summary-total"><span>Total</span><span>${formatPrice(total)}</span></div>
     `;
   } catch (err) {
     summaryWrap.innerHTML = `<p>Couldn't load your cart.</p>`;

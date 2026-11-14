@@ -1,17 +1,15 @@
 # FashionHub
 
-A full-stack fashion e-commerce project — Flask + MongoDB backend, vanilla HTML/CSS/JS frontend. This is the starter scaffold from the project blueprint (Phases 1-4): folder structure, Flask app, MongoDB connection, and working authentication + product APIs.
+A full-stack fashion e-commerce project — Flask + MongoDB backend, vanilla HTML/CSS/JS frontend.
 
-## What's already working
+## Features
 
-- `backend/app.py` — Flask app factory, connects to MongoDB, registers routes
-- `POST /api/auth/register`, `POST /api/auth/login`, `GET /api/auth/me`, `POST /api/auth/logout`
-- `GET /api/products`, `GET /api/products/<id>`, `POST/PUT/DELETE /api/products/<id>`
-- `frontend/index.html` — homepage that fetches and displays products from the API
-
-## What you still need to build
-
-Following the blueprint's roadmap: wishlist, cart, orders and reviews routes (Phase 7-8), admin-only access control on the product write routes (Phase 9), and the remaining frontend pages (product details, cart, checkout, login/register forms, admin panel).
+- Search products by name, brand, or type; filter by category, price, size, colour, brand, and stock; sort by newest, price, or name. Search/filter state is shareable in the URL.
+- Product detail pages with size and colour choices.
+- Cart quantity editing, variant-aware lines, stock validation, and a live cart count.
+- Checkout rechecks stock and reserves inventory; cancelling an order restores it.
+- Admin product catalog management, authentication, orders, wishlists, and reviews.
+- Demo data seeding and an in-memory backend feature test.
 
 ## Run it locally (without Docker)
 
@@ -29,16 +27,34 @@ pip install -r requirements.txt
 cd ..
 copy .env.example .env       # Windows
 cp .env.example .env         # macOS/Linux
-# then edit .env and paste your MongoDB Atlas connection string
+# then edit .env:
+# - replace <username> and <password> in MONGO_URI with your Atlas database user
+# - keep /fashionhub in the URI, or set MONGO_DB_NAME to your preferred database
+# - allow your IP address in Atlas Network Access
 
 # 4. Run the Flask server
 cd backend
 python app.py
 ```
 
-The API will run at `http://localhost:5000`. Check `http://localhost:5000/api/health` to confirm it's connected to MongoDB.
+The API will run at `http://localhost:5000`. Check `http://localhost:5000/api/health` to confirm the MongoDB connection. It returns HTTP 503 if MongoDB is unreachable.
 
-Open `frontend/index.html` directly in your browser (or serve it with VS Code's "Live Server" extension) to see the homepage call the API.
+Open `frontend/index.html` directly in your browser (or use VS Code's "Live Server" extension) to use the storefront.
+
+## Demo data and tests
+
+From the project root, run `python tools/seed_data.py` to add or refresh the demo catalog, accounts, orders, and reviews. It preserves non-demo orders and reviews. Do not use `--reset` unless you intend to delete all products, carts, orders, reviews, and wishlists in the configured database.
+
+Products from before inventory tracking that have no `stock` field show as sold out until stock is set in the admin product form or the demo seeder updates them.
+
+The demo accounts are `admin@fashionhub.com / Admin@123` and `aisha@example.com / Customer@123`. Change these credentials before any public deployment.
+
+To run the backend feature tests against an in-memory MongoDB, install the dev dependencies and run:
+
+```bash
+pip install -r backend/requirements-dev.txt
+python tests/test_shop_features.py
+```
 
 ## Run it with Docker
 

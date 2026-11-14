@@ -68,7 +68,34 @@
         <a id="clearFilter" class="clear-filter" href="index.html#products" hidden>Show all products</a>
       </div>
     </div>
-    <div class="product-grid" id="productGrid"></div>
+
+    <div class="shop-toolbar">
+      <form id="searchForm" class="search-form" role="search">
+        <input type="search" id="searchInput" placeholder="Search by name, brand or type..." aria-label="Search products">
+        <button type="submit" class="btn-primary">Search</button>
+      </form>
+      <div class="toolbar-right">
+        <label for="sortSelect">Sort by</label>
+        <select id="sortSelect">
+          <option value="newest">Newest</option>
+          <option value="price_asc">Price: low to high</option>
+          <option value="price_desc">Price: high to low</option>
+          <option value="name_asc">Name: A to Z</option>
+        </select>
+        <button type="button" id="filterToggle" class="btn-outline">Filters</button>
+      </div>
+    </div>
+
+    <div class="shop-layout">
+      <aside class="filters" id="filtersPanel">
+        <form id="filterForm" autocomplete="off">
+          <p class="status-text">Loading filters...</p>
+        </form>
+      </aside>
+      <div class="shop-results">
+        <div class="product-grid" id="productGrid"></div>
+      </div>
+    </div>
   </div>
 </section>
 

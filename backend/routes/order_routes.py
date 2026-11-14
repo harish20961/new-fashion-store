@@ -29,18 +29,47 @@ def create_order():
     if not cart_items:
         return jsonify({"error": "Your cart is empty"}), 400
 
+    # --- 1. Re-check every item against the live catalogue (price, stock) ---
     order_items = []
     total_amount = 0
     for item in cart_items:
-        total_amount += item["price"] * item["quantity"]
+        try:
+            product = db.products.find_one({"_id": ObjectId(item["product_id"])})
+        except InvalidId:
+            product = None
+        if not product:
+            return jsonify({"error": f"{item['product_name']} is no longer available. Please remove it from your cart."}), 409
+        if int(product.get("stock") or 0) < item["quantity"]:
+            return jsonify({"error": f"Not enough stock for {product['name']}. Please update your cart."}), 409
+
+        price = product["price"]  # use today's price, not the one saved when added
+        total_amount += price * item["quantity"]
         order_items.append({
             "product_id": item["product_id"],
-            "product_name": item["product_name"],
-            "price": item["price"],
+            "product_name": product["name"],
+            "price": price,
             "quantity": item["quantity"],
             "size": item.get("size"),
             "color": item.get("color"),
+            "image_url": product.get("image_url"),
         })
+
+    # --- 2. Take the stock. The filter {"stock": {"$gte": qty}} makes each
+    #        decrement atomic, so two people can't both buy the last item. ---
+    reserved = []
+    for item in order_items:
+        result = db.products.update_one(
+            {"_id": ObjectId(item["product_id"]), "stock": {"$gte": item["quantity"]}},
+            {"$inc": {"stock": -item["quantity"]}},
+        )
+        if result.modified_count == 0:
+            # someone else bought it a moment ago -> put back what we already took
+            for done in reserved:
+                db.products.update_one(
+                    {"_id": ObjectId(done["product_id"])}, {"$inc": {"stock": done["quantity"]}}
+                )
+            return jsonify({"error": f"Sorry, {item['product_name']} just sold out. Please update your cart."}), 409
+        reserved.append(item)
 
     order = {
         "user_id": request.user_id,
@@ -86,7 +115,6 @@ def get_order(order_id):
 @order_bp.route("/<order_id>/status", methods=["PUT"])
 @admin_required
 def update_order_status(order_id):
-    # TODO (Phase 9): restrict this to admin users (check request.user_role == "admin")
     data = request.get_json() or {}
     new_status = data.get("status")
     if new_status not in ALLOWED_STATUSES:
@@ -94,9 +122,22 @@ def update_order_status(order_id):
 
     db = current_app.db
     try:
-        result = db.orders.update_one({"_id": ObjectId(order_id)}, {"$set": {"status": new_status}})
+        order = db.orders.find_one({"_id": ObjectId(order_id)})
     except InvalidId:
         return jsonify({"error": "Invalid order id"}), 400
-    if result.matched_count == 0:
+    if not order:
         return jsonify({"error": "Order not found"}), 404
+
+    db.orders.update_one({"_id": order["_id"]}, {"$set": {"status": new_status}})
+
+    # cancelling an order puts its items back on the shelf (only once)
+    if new_status == "Cancelled" and order.get("status") != "Cancelled":
+        for item in order.get("items", []):
+            try:
+                db.products.update_one(
+                    {"_id": ObjectId(item["product_id"])}, {"$inc": {"stock": item["quantity"]}}
+                )
+            except InvalidId:
+                pass
+
     return jsonify({"message": "Order status updated"})
