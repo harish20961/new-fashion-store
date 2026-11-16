@@ -40,6 +40,13 @@ function updateHeaderForAuth() {
 
   const name = localStorage.getItem("fh_name");
   if (name) {
+    if (!document.getElementById("myOrdersLink")) {
+      const ordersLink = document.createElement("a");
+      ordersLink.id = "myOrdersLink";
+      ordersLink.href = "my-orders.html";
+      ordersLink.textContent = "My Orders";
+      loginLink.parentNode.insertBefore(ordersLink, loginLink);
+    }
     loginLink.textContent = `Hi, ${name}`;
     loginLink.href = "#";
     loginLink.onclick = (e) => {
@@ -47,6 +54,8 @@ function updateHeaderForAuth() {
       logout();
     };
   } else {
+    const oldOrdersLink = document.getElementById("myOrdersLink");
+    if (oldOrdersLink) oldOrdersLink.remove();
     loginLink.textContent = "Log in";
     loginLink.removeAttribute("onclick");
     loginLink.href = "login.html";

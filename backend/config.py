@@ -23,4 +23,8 @@ class Config:
     # Not needed when Flask serves the frontend itself (same origin).
     CORS_ORIGINS = [o.strip() for o in os.environ.get("CORS_ORIGINS", "").split(",") if o.strip()]
 
+    # Firebase project used for Phone OTP login. This is NOT a secret
+    # (it is also in the public frontend config).
+    FIREBASE_PROJECT_ID = os.environ.get("FIREBASE_PROJECT_ID", "fashionhub-41a6d")
+
     JWT_EXP_DELTA_SECONDS = 60 * 60 * 24  # login tokens last 24 hours

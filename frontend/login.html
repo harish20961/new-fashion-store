@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/orders.css">
 </head>
 <body>
 
@@ -31,8 +32,38 @@
   <div class="wrap auth-wrap">
     <div class="auth-card">
       <h1>Log in</h1>
-      <p class="auth-sub">Welcome back — enter your details below.</p>
+      <p class="auth-sub">Log in with your mobile number — no password needed.</p>
       <p id="authSuccess" class="auth-success"></p>
+
+      <div class="login-tabs">
+        <button type="button" id="tabPhone" class="login-tab active">Mobile number</button>
+        <button type="button" id="tabEmail" class="login-tab">Email</button>
+      </div>
+
+      <!-- Phone + OTP -->
+      <form id="phoneForm" class="auth-form" autocomplete="off">
+        <div id="phoneStep">
+          <label for="phoneName">Your name (only for new customers)</label>
+          <input type="text" id="phoneName" maxlength="60" placeholder="Optional">
+
+          <label for="phoneNumber">Mobile number</label>
+          <input type="tel" id="phoneNumber" inputmode="numeric" placeholder="98765 43210">
+
+          <button type="button" id="sendOtpBtn" class="btn-primary btn-full">Send OTP</button>
+        </div>
+
+        <div id="otpStep" style="display:none">
+          <p id="phoneInfo" class="auth-sub"></p>
+          <label for="otpCode">Enter OTP</label>
+          <input type="text" id="otpCode" inputmode="numeric" maxlength="6" placeholder="6 digit code">
+
+          <button type="button" id="verifyOtpBtn" class="btn-primary btn-full">Verify and log in</button>
+          <button type="button" id="changeNumberBtn" class="link-btn">Change number</button>
+        </div>
+
+        <div id="phoneError" class="auth-error"></div>
+        <div id="recaptchaBox"></div>
+      </form>
 
       <form id="loginForm" class="auth-form">
         <label for="email">Email</label>
@@ -54,5 +85,9 @@
 <script src="js/config.js"></script>
 <script src="js/main.js"></script>
 <script src="js/auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/phone-auth.js"></script>
 </body>
 </html>

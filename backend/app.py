@@ -19,8 +19,26 @@ FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__fi
 
 def ensure_indexes(db, logger):
     """Creates the indexes the app relies on. Safe to run on every start."""
+    # Users can sign up with email OR phone, so "email" / "phone" may be missing.
+    # A plain unique index treats every missing value as the same value (null)
+    # and would reject the 2nd phone-only user, so these indexes only apply to
+    # documents that actually have the field.
     try:
-        db.users.create_index("email", unique=True)
+        db.users.drop_index("email_1")  # old plain index; ignored if already gone
+    except Exception:
+        pass
+    try:
+        db.users.create_index(
+            "email", unique=True, name="email_unique_partial",
+            partialFilterExpression={"email": {"$type": "string"}},
+        )
+        db.users.create_index(
+            "phone", unique=True, name="phone_unique_partial",
+            partialFilterExpression={"phone": {"$type": "string"}},
+        )
+    except Exception:
+        logger.exception("Could not create user indexes (app will still start)")
+    try:
         db.products.create_index("category")
         db.carts.create_index("user_id")
         db.orders.create_index([("user_id", ASCENDING), ("created_at", -1)])
