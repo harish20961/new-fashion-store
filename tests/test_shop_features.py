@@ -6,6 +6,7 @@ Uses an in-memory fake MongoDB, so it needs no Atlas connection and changes no r
     python tests/test_shop_features.py
 """
 import sys, os
+os.environ.setdefault("FLASK_ENV", "development")
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "backend"))
 sys.path.insert(0, os.path.join(ROOT, "tools"))

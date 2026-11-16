@@ -1,0 +1,16 @@
+# Render Blueprint: one web service serves the API + storefront + admin panel.
+services:
+  - type: web
+    name: fashionhub
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: MONGO_URI
+        sync: false          # paste your Atlas URI in the Render dashboard
+      - key: MONGO_DB_NAME
+        value: fashionhub
+      - key: SECRET_KEY
+        generateValue: true  # Render creates a strong random value
+      - key: FLASK_ENV
+        value: production

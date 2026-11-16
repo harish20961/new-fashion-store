@@ -39,7 +39,7 @@ python app.py
 
 The API will run at `http://localhost:5000`. Check `http://localhost:5000/api/health` to confirm the MongoDB connection. It returns HTTP 503 if MongoDB is unreachable.
 
-Open `frontend/index.html` directly in your browser (or use VS Code's "Live Server" extension) to use the storefront.
+Flask also serves the storefront, so just open `http://localhost:5000`. (Opening `frontend/index.html` with Live Server still works; `frontend/js/config.js` points it at `http://localhost:5000/api`.)
 
 ## Demo data and tests
 
@@ -62,7 +62,7 @@ python tests/test_shop_features.py
 docker-compose up --build
 ```
 
-This builds the backend image and runs it on port 5000, using the same `.env` file.
+This builds the image (API + storefront + admin) and runs it on port 5000, using the same `.env` file.
 
 ## Project structure
 
@@ -82,3 +82,20 @@ fashion-store/
 ├── docker-compose.yml
 └── .env.example
 ```
+
+## Deploy (Render + MongoDB Atlas)
+
+One web service serves the API, storefront (`/`) and admin panel (`/admin/index.html`).
+
+1. **Atlas:** Network Access -> allow `0.0.0.0/0` (Render has no fixed IP on the free plan) and use a strong DB-user password.
+2. **GitHub:** push this repo. Make sure `.env` is NOT committed (if it ever was, rotate the Atlas password).
+3. **Render:** New -> Blueprint (uses `render.yaml`) or New -> Web Service -> Docker. Set env vars:
+   - `MONGO_URI` = your Atlas URI
+   - `SECRET_KEY` = `python -c "import secrets; print(secrets.token_hex(32))"` (required, 32+ chars)
+   - `FLASK_ENV` = `production`
+   - Health check path: `/api/health`
+4. **Create the admin account** (do NOT run `seed_data.py` against production): register normally, then in Atlas set that user's `role` to `"admin"`.
+5. Smoke test: register -> add to cart -> checkout -> admin changes order status.
+
+If the frontend is hosted on a different domain (Netlify/Vercel), set `CORS_ORIGINS=https://your-site` on the backend and add
+`<script>window.FASHIONHUB_API_URL = "https://your-backend.onrender.com/api";</script>` before `js/config.js` in each HTML page.

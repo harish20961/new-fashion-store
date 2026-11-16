@@ -149,8 +149,6 @@ def get_product(product_id):
 @product_bp.route("", methods=["POST"])
 @admin_required
 def create_product():
-    # TODO (Phase 9): restrict this route to logged-in admins once
-    # role-based access control is added on top of the JWT in auth_routes.py
     data = request.get_json() or {}
     required = ["name", "price", "category"]
     missing = [field for field in required if field not in data]
@@ -165,7 +163,6 @@ def create_product():
 @product_bp.route("/<product_id>", methods=["PUT"])
 @admin_required
 def update_product(product_id):
-    # TODO (Phase 9): admin-only
     data = request.get_json() or {}
     db = current_app.db
     try:
@@ -181,7 +178,6 @@ def update_product(product_id):
 @product_bp.route("/<product_id>", methods=["DELETE"])
 @admin_required
 def delete_product(product_id):
-    # TODO (Phase 9): admin-only
     db = current_app.db
     try:
         result = db.products.delete_one({"_id": ObjectId(product_id)})

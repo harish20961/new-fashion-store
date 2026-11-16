@@ -1,22 +1,31 @@
 import datetime
+import re
 
 import jwt
 from bson import ObjectId
+from pymongo.errors import DuplicateKeyError
 from flask import Blueprint, current_app, jsonify, request
 from werkzeug.security import check_password_hash, generate_password_hash
 
 auth_bp = Blueprint("auth", __name__)
 
+EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+MIN_PASSWORD_LENGTH = 8
+
 
 @auth_bp.route("/register", methods=["POST"])
 def register():
     data = request.get_json() or {}
-    name = data.get("name")
-    email = data.get("email")
-    password = data.get("password")
+    name = (data.get("name") or "").strip()
+    email = (data.get("email") or "").strip().lower()
+    password = data.get("password") or ""
 
     if not name or not email or not password:
         return jsonify({"error": "name, email and password are required"}), 400
+    if not EMAIL_RE.match(email):
+        return jsonify({"error": "Please enter a valid email address"}), 400
+    if len(password) < MIN_PASSWORD_LENGTH:
+        return jsonify({"error": f"Password must be at least {MIN_PASSWORD_LENGTH} characters"}), 400
 
     db = current_app.db
     if db.users.find_one({"email": email}):
@@ -29,7 +38,10 @@ def register():
         "role": "customer",
         "created_at": datetime.datetime.utcnow(),
     }
-    result = db.users.insert_one(user)
+    try:
+        result = db.users.insert_one(user)
+    except DuplicateKeyError:
+        return jsonify({"error": "An account with this email already exists"}), 409
 
     return jsonify({"message": "Account created", "user_id": str(result.inserted_id)}), 201
 
@@ -37,8 +49,8 @@ def register():
 @auth_bp.route("/login", methods=["POST"])
 def login():
     data = request.get_json() or {}
-    email = data.get("email")
-    password = data.get("password")
+    email = (data.get("email") or "").strip().lower()
+    password = data.get("password") or ""
 
     db = current_app.db
     user = db.users.find_one({"email": email})

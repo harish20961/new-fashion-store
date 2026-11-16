@@ -2,7 +2,6 @@
 // FashionHub Admin - Products
 // =========================================
 
-const API_BASE_URL = "http://127.0.0.1:5000/api";
 
 const token = localStorage.getItem("fh_token");
 const role = localStorage.getItem("fh_role");
@@ -112,9 +111,11 @@ function displayProducts(products) {
 
     productsTable.innerHTML = products.map(product => {
 
-        const image = product.image
-    ? `../${product.image}`
-    : (product.image_url || "");
+        // Admin pages live in /admin/, so relative image paths need "../"
+        const rawImage = product.image || product.image_url || "";
+        const image = /^(https?:)?\/\/|^\/|^data:/.test(rawImage)
+    ? rawImage
+    : (rawImage ? `../${rawImage}` : "");
 
         const stock = product.stock ?? 0;
 
@@ -261,8 +262,12 @@ productForm.addEventListener("submit", async function (event) {
         description:
             document.getElementById("productDescription").value.trim(),
 
-        image:
-            document.getElementById("productImage").value.trim()
+        // The storefront, cart and product page all read "image_url".
+        image_url:
+            document.getElementById("productImage").value.trim(),
+
+        // clear the old field name some products were saved with
+        image: ""
     };
 
 

@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   backend:
     build:
@@ -10,8 +8,9 @@ services:
     env_file:
       - .env
     volumes:
-      - ./backend:/app
+      # live-reload friendly mounts for local development only
+      - ./backend:/app/backend
+      - ./frontend:/app/frontend
 
-# No local Mongo service here on purpose: this project connects to
-# MongoDB Atlas (cloud) via MONGO_URI in your .env file, matching the
-# blueprint's "Docker -> Flask -> MongoDB Atlas" setup.
+# No local Mongo service on purpose: this project connects to MongoDB Atlas
+# via MONGO_URI in your .env file. Open http://localhost:5000 once it is up.
